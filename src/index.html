@@ -1,22 +1,1034 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="stylesheet" href="styles.css" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PakePlus App</title>
-        <script type="module" src="/main.js" defer></script>
-    </head>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>站点管理</title>
+    <link rel="stylesheet" href="static/css/cssx/public.css">
+    <link rel="stylesheet" href="static/css/cssx/fq.css">
+    <script src="static/js/echarts.min.js"></script>
+    <script src="static/js/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="static/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="static/css/cssx/bootstrap.min.css">
+    <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        body {
+            background-color: #f0f0f0;  /* 如果图片加载失败时，使用背景颜色 */
+            background: url(static/img/bac.png)center 0;
+            background-size: 100% 100%; /* 宽度保持不变，高度缩小20% */
+            background-repeat: no-repeat;
+        }
+        .container {
+            display: flex;
+            width: 95vw;  /* 容器宽度为浏览器宽度 */
+            height: 95vh; /* 容器高度为浏览器高度 */
+        }
+        .sidebar {
+            width: 200px;
+            height: 80%; /* 容器高度为浏览器高度 */
+            margin-top: 80px;
+			margin-left: -4%;
+            overflow-y: auto; /* 超出部分显示滚动条 */
+            color: white;
+            padding: 20px;
+            position: absolute; /* 必须添加，确保伪元素定位正确 */
+        }
 
-    <body>
-        <main class="container">
-            <h1>Welcome to PakePlus</h1>
+        .sidebar::after {
+          content: "";
+          position: absolute;
+          right: 0;
+          top: 20px;
+          height: 90%;
+          width: 3px; /* 宽度稍微加宽 */
+          background-color: #00a9ff;
+          border-radius: 2px; /* 圆角效果 */
+          box-shadow:2px 2px 5px #00a9ff;
+        }
 
-            <form class="row" id="greet-form">
-                <input id="greet-input" placeholder="Enter a name..." />
-                <button type="submit">Greet</button>
-            </form>
-            <p id="greet-msg"></p>
-        </main>
-    </body>
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 30px;
+            margin-left: -111px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+        }
+
+        button:hover {
+          background-color: #0798bc;
+        }
+
+        .dropdown {
+          display: block; /* 改为 block，确保站点列表总是显示 */
+        }
+
+        .dropdown ul {
+          list-style: none;
+          padding: 0;
+        }
+
+        .dropdown ul li {
+            padding: 10px;
+            cursor: pointer;  /* 鼠标悬停时显示为手型 */
+            color: #ffffff;
+            transition: background-color 0.3s, font-weight 0.3s; /* 增加过渡效果 */
+            border-radius: 11px; /* 圆角效果 */
+        }
+
+        .dropdown ul li:hover {
+            background-color: #66b3ff;
+        }
+
+            /* 右侧内容区域 */
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            position: absolute;
+            bottom: 50px; /* 控制底部距离 */
+            left: 50%;
+            transform: translateX(-50%); /* 让内容居中 */
+            width: 80%; /* 内容宽度 */
+            text-align: center; /* 让内容居中对齐 */
+            box-sizing: border-box;
+        }
+        #siteDetails {
+          margin-top: 20px;
+        }
+        /* 表格样式 */
+        /* 表格容器，启用横向滚动 */
+        .table-container {
+            overflow-x: auto;
+            width: 697px; /* 宽度占满父容器 */
+            margin: 40px -190px; /* 添加上下间距 */
+        }
+        table {
+            width: 1100px; /* 根据需要设置表格的总宽度 */
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #00a9ff; /* 为表格单元格添加边框 */
+            padding: 5px;
+            text-align: center;
+            color: #ffffff;
+        }
+        /* 隐藏所有表格 */
+        .siteTable {
+            display: none;
+        }
+        .todayTimeBox{
+            height: 75px;
+            width: 520px; /* 宽度稍微加宽 */
+            top:5px;
+            right:12px;
+            position: absolute;
+        }
+        .leftMain_middle_rightIn{
+            position: absolute; /* 使用绝对定位 */
+            top: 125px; /* 距离顶部 105px */
+            left: 50%; /* 水平居中 */
+            transform: translateX(-40%); /* 精确居中，通过偏移 -50% */
+            width: 430px; /* 根据需要设置宽度，或可以设置为固定宽度 */
+            height: 400px;
+        }
+        .breathe{
+            top: 80px; /* 距离顶部 105px */
+            left: 70%;
+            position: absolute; /* 使用绝对定位 */
+        }
+        .phoneCalls{
+            width: 97%;
+            height: 636px;
+            margin-top: 290px;
+            left: 70%;
+            background: url(static/img/k_4.png);
+            background-size: 30% 65%; /* 宽度保持不变，高度缩小20% */
+            position: absolute;
+	        background-repeat: no-repeat;
+        }
+        .statusList{
+            height: 280px;
+        }
+		.txt{
+            border:3px;
+            color: azure;
+            background-color: #17255b;
+        }
+		#huamian{
+            margin-left: 50%;
+            margin-top: 11%;
+            transform: translateX(-40%); /* 精确居中，通过偏移 -50% */
+            width: 449px; /* 根据需要设置宽度，或可以设置为固定宽度 */
+            height: 400px;
+			background-color: #e41111;
+			display: none;
+		}
+		#chart-panel {
+			  width: 400px;
+			  height: 400px; /* 设置一个初始高度，也可以设置成 vh 或 % */
+			  max-width: 800px; /* 最大宽度 */
+			  margin: -50px 0 0 25px;  /* 居中显示 */
+			}
+		#th1_a tr, #th1_a td {
+			max-width: 40px;
+			height: 20px;
+			line-height: 0;
+			padding: 15px 0;
+			text-align: center;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			font-size: 12px;
+
+		}
+
+        /* 清除按钮样式 */
+        .clear-btn {
+            margin-top: 20px;
+            padding: 8px 20px;
+            background: #ff4444;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #buttons{
+            width: 100px;
+            padding: 1px;
+            margin-top: 40px;
+            margin-left: -45%;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            font-size: 20px;
+        }
+        #buttons:hover {
+          background-color: #152155;
+        }
+
+        .dynamic-table {
+            width: 100%;
+            color: #fff;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .dynamic-table th {
+            background: #00ffc4;
+            color: #000;
+            padding: 12px;
+            border: 1px solid #00a9ff;
+            position: sticky;
+            top: 0;
+        }
+        .dynamic-table td {
+            border: 1px solid #00a9ff;
+            padding: 10px;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .query-header {
+            text-align: center;
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .time-input {
+            border-radius: 4px;
+            padding: 8px;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+  <div class="container">
+      <div class="todayTimeBox">
+            <div class="todayTime">
+                    <select id="data_slide" class="xia" style="background-color: transparent;border-radius: 10px;width: 200px;height: 30px;border-radius:5px;font-size: 20px;color: #ffffff;" name="info">
+                        <option class="txt" value="0355ma0ke4qf53">新创脱硫塔废气排口</option>
+                        <option class="txt" value="03555908963251">煤矸石电厂240t锅炉排口</option>
+                        <option class="txt" value="03550451101353">特种焦八号</option>
+                    </select>
+                    <input name="times" id="data_info" type="text" value="请选择时间" style="text-align: center;background-color: transparent;height: 30px;border-radius:5px;font-size: 20px;color: #ffffff;">
+                    <script>
+                        function updateInput() {
+                            var now = new Date();
+                            var year = now.getFullYear();
+                            var month = ('0' + (now.getMonth() + 1)).slice(-2);
+                            var day = ('0' + now.getDate()).slice(-2);
+                            var hours = ('0' + now.getHours()).slice(-2);
+                            var minutes = ('0' + now.getMinutes()).slice(-2);
+                            var seconds = ('0' + now.getSeconds()).slice(-2); // 添加秒的格式化
+                            document.getElementById('data_info').value = year + '年' + month + '月' + day + '日 ' + hours + ':' + minutes + ':' + seconds;;
+                          }
+                          setInterval(updateInput, 60000); // 每秒调用一次 updateInput 函数
+                </script>
+                    <button id="buttons" type="button" class="time-input"
+                            onclick="handleQuery()"
+                            style="color: #ffffff; transition: all 0.3s;">
+                        立即查询
+                    </button>
+            </div>
+        </div>
+
+          <!-- 在原有HTML中添加弹窗结构 -->
+        <div id="modalBackdrop" class="modal-backdrop">
+          <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-body" id="resultTable"></div>
+          </div>
+        </div>
+      <style>
+        .modal-backdrop {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgb(255 255 255 / 50%);
+          z-index: 999;
+        }
+
+        .modal-content {
+          position: relative;
+          width: 90vw;
+          height: 80vh;
+          max-width: 1440px;
+          margin: 5% auto;
+          background: #ffffff;
+          border: 1px solid #ffffff;
+          overflow: auto;
+          box-sizing: border-box;
+        }
+
+        .modal-body {
+          padding: 20px;
+          width: max-content;
+          min-width: 100%;
+          display: flex;          /* 弹性布局容器 */
+          justify-content: center; /* 水平居中 */
+        }
+
+        #resultTable {
+          margin: 0 auto;         /* 表格容器居中 */
+        }
+
+        #resultTable table {
+          width: auto;
+          border-collapse: collapse;
+          table-layout: auto;
+        }
+
+        #resultTable th,
+        #resultTable td {
+          border: 1px solid #0088cc;
+          padding: 5px;
+          text-align: center;
+          color: #000000;
+          white-space: nowrap;
+        }
+
+        #resultTable th {
+          background: #13f2ff;
+          font-size: 12px;
+          font-weight: bold;
+          position: sticky;
+          top: 0;
+          z-index: 1;
+        }
+      </style>
+
+        <script>
+        // 修改后的查询函数
+        async function handleQuery() {
+          try {
+            // showLoading(); // 显示加载状态
+            const timestamps = document.getElementById('data_info').value.replace(/[年月]/g, '-').replace('日', '');
+            const sites = document.getElementById('data_slide').value;
+            const response = await fetch('/query_api', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                site: sites,
+                timestamp: timestamps
+              })
+            });
+
+            if (!response.ok) throw new Error(`请求失败: ${response.status}`);
+
+            const { status, data } = await response.json();
+            console.log(status);
+            console.log(data);
+
+            if (status !== 'success') throw new Error(data?.message || '未知错误');
+            renderTable(data);
+            openModal();
+          } catch (error) {
+            console.error('查询失败:', error);
+            alert(error.message);
+          } finally {
+              console.error('隐藏加载状态');
+              // hideLoading(); // 隐藏加载状态
+          }
+        }
+
+        // 渲染表格
+        function renderTable(data) {
+          const container = document.getElementById('resultTable');
+          if (data.length === 0) {
+            container.innerHTML = "<div class='no-data'>没有查询到相关数据</div>";
+            return;
+          }
+
+          let html = `<table>
+            <thead><tr>${Object.keys(data[0]).map(k => `<th>${k}</th>`).join('')}</tr></thead>
+            <tbody>`;
+
+          data.forEach(row => {
+            html += `<tr>${Object.values(row).map(v =>
+              `<td>${v !== null ? v : '-'}</td>`
+            ).join('')}</tr>`;
+          });
+
+          html += '</tbody></table>';
+          container.innerHTML = html;
+        }
+
+        // 弹窗控制
+        function openModal() {
+          document.getElementById('modalBackdrop').style.display = 'block';
+        }
+
+        function closeModal() {
+          document.getElementById('modalBackdrop').style.display = 'none';
+        }
+
+        // 点击背景关闭
+        document.getElementById('modalBackdrop').onclick = closeModal;
+        </script>
+
+
+        <div class="leftMain_middle_rightIn" id='chartmains'>
+            <p style="color: #ffffff;" class="p-1">预警信息监测</p>
+            <div class="biaoge biaoge_pai" id="warning" style="width:100%; height:28vh; font-size: 30px;">
+                <div class="biaoge_paiIn" style="color: white;" id="warnings">
+                    <ul>
+                        <li>
+                            <div class="liIn" style="font-size:16px">
+                                <div class="liIn_left" style="width:50%;"><span class="bot" style="background:#00ffc4;"></span><span class="zi">暂时未扫描到预警信息</span></div>
+                                <p id="num"></p>
+                                <script>
+                                  function updateInput() {
+                                    var now = new Date();
+                                    var year = now.getFullYear();
+                                    var month = ('0' + (now.getMonth() + 1)).slice(-2);
+                                    var day = ('0' + now.getDate()).slice(-2);
+                                    var hours = ('0' + now.getHours()).slice(-2);
+                                    var minutes = ('0' + now.getMinutes()).slice(-2);
+                                    var seconds = ('0' + now.getSeconds()).slice(-2); // 添加秒的格式化
+                                    var timeString = year + '年' + month + '月' + day + '日 ' + hours + ':' + minutes + ':' + seconds;
+
+                                    document.getElementById('num').textContent = timeString; // 将时间字符串设置为 p 标签的文本内容
+                                    <!-- document.getElementById('data_info').value = timeString; -->
+                                  }
+
+                                  updateInput(); // 页面加载时立即更新时间
+                                  setInterval(updateInput, 1000); // 每秒调用一次 updateInput 函数
+                        </script>
+                            </div>
+                        </li>
+                   </ul>
+                </div>
+            </div>
+        </div>
+        <div id='huamian'></div>
+        <div class="breathe">
+            <div class="seHeader">
+                <span>
+                    <p class="p-1">总点位及在线情况</p>
+                    <p class="p-2">Total location and online status</p>
+                </span>
+                <span>\02</span>
+            </div>
+            <div class="serData">
+                <div class="serDataLeft">
+                    <div><span class="serNum">3</span>个点位</div>
+                    <p>当前接入总量</p>
+                </div>
+                <div class="serDataLeft">
+                    <div><span class="serNum" id="serNums">**</span>个点位</div>
+                    <p>在线站点数</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="phoneCall">
+            <div class="seHeader">
+                <span>
+                    <p class="p-1">全参数服务站点情况</p>
+                    <p class="p-2">Full parameter service site situation</p>
+                </span>
+                <span>\01</span>
+            </div>
+            <div class="statusList">
+                <ul class="seTable">
+                    <li>站点</li>
+                    <li>时间</li>
+                    <li>氧含量</li>
+                    <li>烟尘</li>
+                    <li>二氧化硫</li>
+                    <li>氮氧化物</li>
+                </ul>
+                <div class="outlineBorder" id="th1_s">
+                    <ul class="excelstyle">
+                        <li class="txt" style="border-bottom: 1px solid #fff;">等待加载</li>
+                        <li class="Data_time txts" style="font-size:10px;border-bottom: 1px solid #fff;">等待加载</li>
+                        <li class="O2HL txts" style="font-size:10px;border-bottom: 1px solid #fff;">等待加载</li>
+                        <li class="YC txts" style="font-size:10px;border-bottom: 1px solid #fff;">等待加载</li>
+                        <li class="SO2 txts" style="font-size:10px;border-bottom: 1px solid #fff;">等待加载</li>
+                        <li class="NOX txts" style="font-size:10px;color:#fff;border-bottom: 1px solid #fff;">等待加载</li>
+                    </ul>
+                </div>
+            </div>
+            <style>
+                /* 定义 ul 的基本样式 */
+                .statusList ul.seTable {
+                    list-style-type: none; /* 移除默认的列表标记 */
+                    padding: 0;
+                    margin: 0;
+                    display: flex; /* 使用 flexbox 布局 */
+                    justify-content: space-between; /* 使列名均匀分布 */
+                    width: 100%; /* 占满容器宽度 */
+                }
+
+                /* 定义 li 的基本样式 */
+                .txt, .txts {
+                    display: inline-block; /* 使 li 元素水平排列 */
+                    padding: 8px; /* 单元格内边距 */
+                    text-align: center; /* 文本居中 */
+                }
+
+                /* 定义 .outlineBorder 的基本样式 */
+                .outlineBorder {
+                    display: flex; /* 使用 flexbox 布局 */
+                    flex-direction: column; /* 子元素垂直排列 */
+                }
+
+                /* 定义 .excelstyle 的基本样式 */
+                .excelstyle {
+                    list-style-type: none; /* 移除默认的列表标记 */
+                    padding: 0;
+                    margin: 0;
+                    display: flex; /* 使用 flexbox 布局 */
+                    justify-content: space-between; /* 使列内容均匀分布 */
+                    width: 100%; /* 占满容器宽度 */
+                }
+
+                /* 定义 li 的边框样式 */
+                .excelstyle li {
+                    border-right: 1px solid #fff; /* 右边线 */
+                    border-bottom: 1px solid #fff; /* 下边线 */
+                    padding: 8px; /* 单元格内边距 */
+                    text-align: center; /* 文本居中 */
+                }
+
+            </style>
+        </div>
+
+        <div class="rightContent">
+            <div class="phoneCalls">
+                <div class="seHeader">
+                    <span>
+                        <p class="p-1">选定站点情况分析</p>
+                        <p class="p-2">Telephone call analysis</p>
+                    </span>
+                    <span style="left: 330px; position: absolute;">\03</span>
+                </div>
+                <div class="phoneNum" id="chart-panel"></div>
+
+
+				<!-- 表格容器 -->
+				<table id="status-panels" class="statusList" style="display: none;margin-left: 48px;margin-top: 15px;">
+
+					<thead>
+						<tr style="table-layout: auto;">
+							<th style="width: 50px;font-size: 12px;">站点</th>
+							<th style="width: 50px;font-size: 12px;">时间</th>
+							<th style="width: 50px;font-size: 12px;">COD</th>
+							<th style="width: 50px;font-size: 12px;">NH3-N</th>
+							<th style="width: 50px;font-size: 12px;">TP</th>
+							<th style="width: 50px;font-size: 12px;">PH</th>
+							<th style="width: 50px;font-size: 12px;">FLOW</th>
+						</tr>
+					</thead>
+					<tbody id="th1_a" class="excelstyles test_tables">
+						<tr>
+							<td>等待加载</td>
+							<td>等待加载</td>
+							<td>等待加载</td>
+							<td>等待加载</td>
+							<td>等待加载</td>
+							<td>等待加载</td>
+							<td>等待加载</td>
+						</tr>
+					</tbody>
+			  </table>
+
+
+            </div>
+        </div>
+
+    <div class="sidebar">
+        <div class="dropdown">
+            <ul>
+                <li class="siteItem">新创脱硫塔废气排口</li>
+                <li class="siteItem">煤矸石电厂240t锅炉排口</li>
+                <li class="siteItem">特种焦八号</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="content table-container">
+
+      <!-- 站点 1 的表格 -->
+      <table id="table1" class="siteTable" style="display: none;">
+		<thead>
+			<tr style="table-layout: auto;">
+				<th>站点</th>
+				<th>时间</th>
+				<th>氧含量</th>
+				<th>氧含量状态</th>
+				<th>烟尘干值</th>
+				<th>烟尘干值状态</th>
+				<th>二氧化硫干值</th>
+				<th>二氧化硫状态</th>
+				<th>氮氧化物</th>
+				<th>氮氧化物状态</th>
+			</tr>
+		</thead>
+		<tbody id="test_table" class="excelstyles test_tables">
+			<tr>
+				<td>等待加载</td>
+				<td>等待加载</td>
+				<td>等待加载</td>
+				<td>等待加载</td>
+				<td>等待加载</td>
+				<td>等待加载</td>
+				<td>等待加载</td>
+				<td>等待加载</td>
+				<td>等待加载</td>
+				<td>等待加载</td>
+			</tr>
+		</tbody>
+      </table>
+    </div>
+
+  </div>
+</body>
+<script type="module" type=" text/javascript">
+  alert('程序正在启动-请点击确定后选择左侧边栏任意站点');
+  const siteItems = document.querySelectorAll('.siteItem');
+
+  const tables = document.querySelectorAll('.siteTable');
+
+  // 初始化默认选择的站点
+  var currentSite = null;
+
+  // 页面加载时初始化，默认显示第一个站点对应的表格
+  window.onload = function() {
+    // 获取左侧第一个站点名称
+    const firstSiteName = siteItems[0].textContent;
+
+    // 隐藏所有表格
+    tables.forEach(table => {
+      table.style.display = 'none';
+    });
+
+    // 显示第一个站点对应的表格
+    if (firstSiteName) {
+      document.getElementById('table1').style.display = 'table';
+      currentSite = firstSiteName;
+    }
+  };
+
+  // 为每个 siteItem 添加点击事件监听器
+  siteItems.forEach(item => {
+    item.addEventListener('click', () => {
+      // 获取点击的站点名称
+      const siteName = item.textContent;
+
+      // 隐藏所有的表格
+      tables.forEach(table => {
+        table.style.display = 'none';
+      });
+
+      // 根据选择的站点显示相应的表格
+      if (siteName === '新创脱硫塔废气排口') {
+        document.getElementById('table1').style.display = 'table';
+        currentSite = '新创脱硫塔废气排口';
+      } else if (siteName === '煤矸石电厂240t锅炉排口') {
+        document.getElementById('table1').style.display = 'table';
+        currentSite = '煤矸石电厂240t锅炉排口';
+      } else if (siteName === '特种焦八号') {
+        document.getElementById('table1').style.display = 'table';
+        currentSite = '特种焦八号';
+      }
+    });
+  });
+
+	let socket;
+	let retryCount = 0;  // 用于追踪重试次数
+
+	function echarts_data(echartsdata) {
+		var dom = document.getElementById("chart-panel");
+		var myChart = echarts.init(dom);
+		var option;
+		var app ={};
+		let list = [
+					{percentage: '', name: "氧含量", value: echartsdata.氧含量},
+					{percentage: '', name: "二氧化硫", value: echartsdata.二氧化硫},
+					{percentage: '', name: "烟尘", value: echartsdata.烟尘},
+					{percentage: '', name: "氮氧化物", value: echartsdata.氮氧化物},
+					{percentage: '', name: "非甲烷总烃", value: echartsdata.非甲烷总烃},
+					{percentage: '', name: "烟气湿度", value: echartsdata.烟气湿度},
+					{percentage: '', name: "烟气流速", value: echartsdata.烟气流速},
+					{percentage: '', name: "温度", value: echartsdata.温度},
+					{percentage: '', name: "废气", value: echartsdata.废气},
+					// {percentage: '', name: "一氧化氮", value: echartsdata.一氧化氮},
+				]
+		var nameArray = list.map(item=>{
+			return item.name + '\t\t\t' + item.value + '\t\t\t'
+		})
+		var color=['#2ca1ff','#0adbfa','#febe13','#65e5dd','#7b2cff','#fd5151','#f071ff', '#85f67a','#0baefd','#fdcd0b','#0bfdab','#ff5353','#ff72cb','#8488ff',]
+		var echarts_data = [];
+		for (var i = 0; i < list.length; i++) {
+			echarts_data.push({
+				value: list[i].value,
+				name: list[i].name + '\t\t\t' + list[i].value + '\t\t\t',
+				itemStyle: {
+					normal: {
+						borderWidth: 2,
+						shadowBlur: 5,
+						borderRadius:5,
+						borderColor:color[i],
+						shadowColor: color[i]
+					}
+				}
+			}, {
+				value: 1,
+				name: '',
+				itemStyle: {
+					normal: {
+						label: {
+							show: false
+						},
+						labelLine: {
+							show: false
+						},
+						color: 'rgba(0, 0, 0, 0)',
+						borderColor: 'rgba(0, 0, 0, 0)',
+						borderWidth: 0
+					}
+				}
+			});
+		}
+		option = {
+			backgroundColor:"rgba(0, 0, 0, 0)",
+			color : color,
+			tooltip: {
+				show: false
+			},
+			title: {
+				text: '',
+				left: '8%',
+				top: 'center',
+				textStyle: {
+					color: '#ffffff',
+					fontWeight: 'bold',
+					fontSize: "1.5rem",
+				}
+			},
+			legend: [{
+				icon: `path://M881.387 297.813c38.08 65.387 57.28 136.747 57.28 214.187s-19.094 148.8-57.28 214.187c-38.187 65.28-89.92 117.12-155.2 155.2S589.44 938.667 512 938.667s-148.8-19.094-214.187-57.28c-65.28-38.08-117.013-89.814-155.306-155.307C104.427 660.8 85.333 589.44 85.333 512c0-77.333 19.094-148.693 57.28-214.187 38.08-65.28 89.814-117.013 155.307-155.306C363.2 104.533 434.56 85.333 512 85.333c77.333 0 148.693 19.094 214.187 57.28 65.28 38.187 117.013 89.92 155.2 155.2z m-217.707-47.36C617.387 223.467 566.827 209.92 512 209.92s-105.387 13.547-151.68 40.533-82.987 63.68-109.973 109.974c-26.987 46.293-40.534 96.853-40.534 151.68s13.547 105.386 40.534 151.68c26.986 46.293 63.68 82.986 109.973 109.973 46.293 26.987 96.853 40.533 151.68 40.533s105.387-13.546 151.68-40.533c46.293-26.987 82.987-63.68 109.973-109.973 26.987-46.294 40.534-96.854 40.534-151.68s-13.547-105.387-40.534-151.68c-27.093-46.294-63.786-82.987-109.973-109.974z`,
+				orient: 'vertical',
+				data:nameArray,
+				top: 'center',
+				align: 'left',
+				left: '70%',
+				itemGap: 5,
+				textStyle: {
+					color: 'rgba(36, 173, 254, 1)',
+					fontSize: "1rem",
+				},
+				//图例标记的图形高度
+				itemHeight: 10,
+				//图例标记的图形宽度
+				itemWidth: 10,
+			},
+			],
+			toolbox: {
+				show: false
+			},
+			series: [{
+				name: '',
+				type: 'pie',
+				clockWise: false,
+				radius: ['65%', '65%'],
+				width:"55%",
+				height:"55%",
+				hoverAnimation: false,
+				center: ['35%', '50%'],
+				top:"center",
+				itemStyle: {
+					normal:{
+						label: {
+							show:false
+						}
+					}
+				},
+				data: echarts_data
+			}]
+		};
+
+	if (option && typeof option === 'object') {
+			myChart.setOption(option);
+		}
+	}
+
+    export function processData(data) {
+        const messages = [];
+        if (!data?.length) return "No data";
+
+        // 配置每个站点的检测规则（可扩展）
+        const siteConfig = {
+            "新创脱硫塔废气排口": {
+                params: {
+                    温度: { min: 10, max: 60 },
+                    二氧化硫: { min: 0, max: 28 },
+                    氮氧化物: { min: 0, max: 21.2 },
+                    氧含量: { min: 0, max: 12 },
+                    烟尘: { min: 0, max: 6 }
+                },
+                statusCheck: {
+                    氧含量状态: ['N', '-']
+                }
+            },
+            "煤矸石电厂240t锅炉排口": {
+                params: {
+                    温度: { min: 5, max: 55 },  // 示例：不同站点的阈值
+                    二氧化硫: { min: 10, max: 30 },
+                    流速: { min: 0, max: 30 }
+                },
+                statusCheck: {
+                    氧含量状态: ['N', '-']
+                }
+            }
+            // 添加更多站点...
+        };
+        for (const item of data) {
+            const outlet = item.outlet?.trim();
+            if (!outlet) continue;
+            // 获取当前站点的配置
+            const config = siteConfig[outlet];
+            if (!config) continue;  // 跳过未配置的站点
+
+            // 提取时间
+            const timePart = item.pub_date?.slice(11, 19) || '未知时间';
+            const prefix = `${outlet}-${timePart}`;
+
+            // 检查数值型参数异常
+            Object.entries(config.params).forEach(([param, { min, max }]) => {
+                const value = parseFloat(item[param]);
+                if (!isNaN(value) && (value <= min || value >= max)) {
+                    messages.push(`${prefix}: ${param}异常 ${value.toFixed(3)}`);
+                }
+            });
+
+            // 检查状态参数异常
+            Object.entries(config.statusCheck).forEach(([statusField, allowedValues]) => {
+                const status = item[statusField]?.trim();
+                if (status && !allowedValues.includes(status)) {
+                    messages.push(`${prefix}: ${statusField}异常 ${status}`);
+                }
+            });
+        }
+
+        return messages.length ? messages.join('\n') : "No data";
+    }
+    // 你还可以导出其他的变量或函数
+    export const dataVar = [{ title: 'Book 1', author: 'Author A' }];
+
+	function createWebSocketConnection() {
+		// 创建 WebSocket 连接
+		socket = new WebSocket("ws://localhost:8766");
+		// 注册事件监听器
+		socket.addEventListener('message', createWebSocketConnection);
+
+		// 在不再需要时移除事件监听器
+		// 确保长时间运行时，事件监听器不会无限制增加
+		socket.removeEventListener('message', createWebSocketConnection);
+		// 连接打开时的回调函数
+		socket.onopen = function () {
+			console.log('WebSocket 已连接');
+		};
+		// 连接关闭时的回调函数
+		socket.onclose = function () {
+			console.log('WebSocket 已关闭');
+
+			// 如果重试次数小于 3，尝试重新连接
+			if (retryCount < 3) {
+				retryCount++;
+				console.log('尝试重新连接，第 ${retryCount} 次');
+				setTimeout(createWebSocketConnection, 3000);  // 3秒后重新连接
+			} else {
+				// 重试次数超过 3 次，提示连接异常
+                console.log('网络连接异常');
+			}
+		};
+
+		// 接收到消息时的回调函数
+		socket.onmessage = function (event) {
+			// 检查是否是心跳包（ping）
+			if (event.data === "ping") {
+				console.log("收到心跳包");
+			} else {
+				try {
+					const message = JSON.parse(event.data);
+                    // 按消息类型分流处理
+                    switch(message.type) {
+                        case 'connection_status':
+                            // 更新连接状态UI
+                            console.log('连接状态:', message.connected);
+                            break;
+
+                        case 'realtime_update':
+                            // 处理实时数据
+                            var booksVar = message.data; // 注意字段名改为data
+                            $("#serNums").html("<span>" + message.stats + "</span>");
+
+                            var tr_dc = '';
+                            var tr_op = '';
+                            var tr_a = '';
+                            var firstMatchFound = false; // 标记是否已经找到符合条件的第一条数据
+                            for (var i = 0; i < booksVar.length; i++) {
+
+                                if (booksVar[i].outlet == currentSite) {
+                                    if (!firstMatchFound) {
+                                            var pOptions = "<tr><td>" + booksVar[i].outlet + "</td>" +
+                                                "<td>" + booksVar[i].pub_date.slice(11) + "</td>" +
+                                                "<td>" + booksVar[i].氧含量 + "</td>" +
+                                                "<td>" + booksVar[i].氧含量状态 + "</td>" +
+                                                "<td>" + booksVar[i].烟尘 + "</td>" +
+                                                "<td>" + booksVar[i].烟尘状态 + "</td>" +
+                                                "<td>" + booksVar[i].二氧化硫 + "</td>" +
+                                                "<td>" + booksVar[i].二氧化硫状态 + "</td>" +
+                                                "<td>" + booksVar[i].氮氧化物 + "</td>" +
+                                                "<td>" + booksVar[i].氮氧化物状态 + "</td></tr>";
+                                        tr_dc += pOptions;
+                                        // 设置标记为已找到第一条
+                                        firstMatchFound = true;
+                                        echarts_data(booksVar[i]);  // 右二图表
+                                        }
+                                }
+                                if (booksVar[i].num == '1'){
+                                    // 获取图表和表格容器
+                                    var chartPanel = document.getElementById('chart-panel');
+                                    var statusPanel = document.getElementById('status-panels');
+                                    // 如果 num 为 1，隐藏图表并显示表格
+                                    chartPanel.style.display = 'none';
+                                    statusPanel.style.display = 'block';
+                                    var popOutlettxt = "<tr><td>" + booksVar[i].outlet + "</td>"+
+                                        "<td>" + booksVar[i].pub_date.slice(11) + "</td>"+
+                                        "<td>" + booksVar[i].cod + "</td>"+
+                                        "<td>" + booksVar[i].nh3n + "</td>"+
+                                        "<td>" + booksVar[i].tp + "</td>"+
+                                        "<td>" + booksVar[i].ph + "</td>"+
+                                        "<td>" + booksVar[i].flow + "</td></tr>"
+                                    tr_a += popOutlettxt;
+
+                                }else{
+                                    var popOutlettxt = "<ul><li>" + booksVar[i].outlet + "</li>"+
+                                    "<li style='font-size:10px;border-bottom: 1px solid #fff;'>" + booksVar[i].pub_date.slice(11) + "</li>"+
+                                    "<li style='font-size:10px;border-bottom: 1px solid #fff;'>" + booksVar[i].氧含量 + "</li>"+
+                                    "<li style='font-size:10px;border-bottom: 1px solid #fff;'>" + booksVar[i].烟尘 + "</li>"+
+                                    "<li style='font-size:10px;border-bottom: 1px solid #fff;'>" + booksVar[i].二氧化硫 + "</li>"+
+                                    "<li style='font-size:10px;border-bottom: 1px solid #fff;'>" + booksVar[i].氮氧化物 + "</li></ul>"
+                                    tr_op += popOutlettxt;
+                                }
+                            }
+                            $("#test_table").html(tr_dc);
+                            $("#th1_s").html(tr_op);
+                            $("#th1_a").html(tr_a);
+                            // 此处需要修改进行匹配
+                            const titles = processData(booksVar);  // 调用 processData 函数传到js中进行判断并接收返回值
+                            if (titles && titles !== "No data") {
+                              // 执行相关操作
+                                var titless = ''
+                                var warning = document.getElementById("huamian");
+                                warning.style.display = "block";
+                                titless = titles.toString().replace(/,/g," ").replace(/\n/g, "<br/>");
+                                $('#huamian').html(titless);
+
+                                // 正则表达式匹配所有数字（包括可能的小数）
+                                let regex = /([\d.]+)/g;
+
+                                // 使用正则表达式提取所有的数字
+                                let matches = [];
+                                let match;
+                                while ((match = regex.exec(titless)) !== null) {
+                                  matches.push(match[1]);
+                                }
+
+                                // 使用 for 循环遍历提取出的数值
+                                for (let i = 0; i < matches.length; i++) {
+                                   // 获取所有的 td 元素
+                                var tdElements = document.querySelectorAll('td');
+
+                                // 遍历所有 td 元素，查找包含文本 '48.644' 的 td
+                                tdElements.forEach(function(td) {
+                                    if (td.textContent.trim() === matches[i]) {
+                                        // 设置背景色为红色或其他颜色（自动执行）
+                                        td.style.backgroundColor = "red";  // 设置为红色
+                                        setTimeout(function() {
+                                            // 延时切换为另一种颜色（模拟背景色变化）
+                                            td.style.backgroundColor = "rgb(2,65,125,1)";
+                                        }, 5000); // 1000 毫秒后变为另一个颜色
+                                    }
+                                });
+                                }
+                                // var audio= new Audio("https://img.tukuppt.com/newpreview_music/08/99/14/5c88e51168d3728345.mp3");//这里的路径写上mp3文件在项目中的绝对路径
+                                var audio= new Audio("static/mp3/1.mp3");//这里的路径写上mp3文件在项目中的绝对路径
+                                audio.play();//播放
+                            } else {
+                                var warning = document.getElementById("huamian");
+                                warning.style.display = "none";
+                            }
+                            break;
+                        default:
+                            console.warn('未知消息类型:', message);
+					}
+					}catch (e) {
+						console.log('尝试重连', e);
+						setTimeout(createWebSocketConnection, 3000);  // 3秒后重新连接
+				}
+			}
+		};
+		// 连接错误时的回调函数
+		socket.onerror = function (error) {
+			console.error('WebSocket 发生错误，正在重新连接...：', error);
+			setTimeout(createWebSocketConnection, 3000);  // 3秒后重新连接
+		};
+	}
+
+	// 启动 WebSocket 连接
+	createWebSocketConnection();
+</script>
+
 </html>
