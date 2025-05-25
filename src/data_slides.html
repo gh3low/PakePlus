@@ -1,0 +1,778 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>数据查询</title>
+	<script src="static/js/jquery-1.11.0.min.js" type="text/javascript"></script>
+	<script src="static/js/jquery.min.js"></script>
+	<style>
+		.htmleaf-containers{
+			max-height: 1200px;
+			max-width: 1500px;
+		}
+		.lifeTop{
+			font-weight:bold;
+			background-color: #3aafa8;
+			border:2px solid #3aafa8;
+			border-radius:5px;
+			text-align: center;
+			font-size: 20px;
+			color:#fff;
+			position:absolute;
+			left:190px;
+			text-decoration:none;
+			padding: 4px 12px;
+            margin-top: 1.5%;
+		}
+        .htmleaf-header h1{
+            width: 480px;
+            height: 45px;
+            margin: 0px auto 0px;
+			font-size: 60px;
+			color: white;
+        }
+        .htmleaf{
+            width: 310px;
+            height: 45px;
+            margin: 15px auto;
+        }
+        .xia{
+            width: 190px;
+            height: 35px;
+			font-size: 25px;
+            border: 3px;
+            background: none;
+			background-color: #02417d;
+			color: white;
+			border-radius: 5px;
+        }
+        .input-group {
+            top: 8px;
+            position: relative;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            -webkit-box-align: stretch;
+            -ms-flex-align: stretch;
+            align-items: stretch;
+            width: 180%;
+        }
+
+        #data_info{
+            height: 30px;
+            font-size: 20px;
+            width: 255px;
+            background: none;
+			color: white;
+			border: 0;
+         }
+        div.bootstrap-datetimepicker-widget.dropdown-menu.usetwentyfour.bottom{
+			width:230px;
+		}
+        .container{
+			width: 80%;
+            max-width: 80%;
+        }
+        .fa-calendar{
+            top: 5px;
+        }
+		.button.blue {
+			  color: #fff;
+			  background-color: #3aafa8;
+			  border-color: #3aafa8;
+		}
+
+		.button.blue:hover{
+			background-color: #3aafa8;
+		}
+
+		.button.blue:active{
+		  	background: #3aafa8;
+		}
+
+		.button.small{
+			font-size: 20px;
+			cursor:pointer;
+			border-radius:5px;
+			position:absolute;
+			top: 95px;
+			left:190px;
+		    padding: 4px 12px;
+		}
+		.city{
+			font-weight:bold;
+			background-color: #02417d;
+			border:2px solid #02417d;
+			border-radius:5px;
+			text-align: center;
+			font-size: 20px;
+			color:#fff;
+			position:relative;
+			margin-left:1200px;
+			text-decoration:none;
+			padding: 4px 12px;
+		}
+        .cha_buts{
+            width: 300px;
+            /*height: 25px;*/
+            right: 16%;
+            margin-top: -0.2%;
+            position: absolute;
+            color: #000000;
+        }
+        .cha{
+            width: 108px;
+            height: 40px;
+			position:relative;
+			margin-left: 0;
+			margin-top:-15px;
+        }
+        .qing{
+            width: 108px;
+            height: 40px;
+			position:relative;
+			margin-left: 125%;
+			top:-40px;
+			color: #fff;
+            left: -245px;
+        }
+        .blues{
+            margin-top: 10px;
+            text-align: center;
+            <!-- background-color: #3aafa8; -->
+            background-color: #02417d;
+			font-size: 20px;
+        }
+		.blues tr th{
+			text-align: center;
+			color: white;
+			background-color: #02417d;
+		}
+        .excelstyles{
+            text-align: center;
+			font-size: 20px;
+			color: white;
+			background-color: #02417d;
+        }
+		.table-striped>tbody>tr:nth-of-type(odd) {
+			background-color: #02417d;
+		}
+		.table-bordered {
+			<!-- border: 1px solid #02417d; -->
+		}
+		.table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th{
+		<!-- border: 1px solid #02417d; -->
+		}
+        .th_tr{
+            margin-top: 7%;
+            position: relative;
+        }
+		.input-group-addon .glyphicon{
+			color: #3aafa8;
+		}
+		i.fa.fa-calendar {
+			{#background-color: #333;#}
+			width: 35px;
+			height: 35px;
+			left: 10px;
+			position: absolute;
+		}
+        .a_clas{
+            text-decoration:none;
+            margin-top:5px;
+            color:white;
+        }
+        .fixed{
+            display: none;
+        }
+		#txt{
+            width: 100%;
+			text-align:center;
+			font-size: 40px;
+			color: white;
+        }
+		body{
+			background-color: #02417d;
+			color: #02417d;
+		}
+		.th_t{
+			width: 315px;
+			max-height: 117px;
+			position: relative;
+			color: white;
+			overflow: hidden;
+			top: 30px;
+		}
+		.th1 tr th{
+			border-left: 1px solid #fff;
+			border-top: 1px solid #fff;
+			border-right: 1px solid #fff;
+			border-bottom: 1px solid #fff;
+			text-align: center;
+            font-size: 16px;
+		}
+		#th1_s tr td {
+			border-left: 1px solid #fff;
+			border-top: 1px solid #fff;
+			border-right: 1px solid #fff;
+			text-align: center;
+		}
+		.blues tr th{
+			border-left: 1px solid #fff;
+			border-top: 1px solid #fff;
+			border-right: 1px solid #fff;
+			border-bottom: 1px solid #fff;
+			text-align: center;
+		}
+		#test_table tr td {
+			border-left: 1px solid #fff;
+			border-top: 1px solid #fff;
+			border-right: 1px solid #fff;
+			border-bottom: 1px solid #fff;
+			text-align: center;
+		}
+
+	</style>
+<style>
+/* 主容器统一设置 */
+body {
+  position: relative;
+  min-height: 100vh;
+}
+
+/* 大表格样式调整 */
+.table-bordered {
+  width: 75% !important;
+  margin: 0 auto;
+  transform: translateX(5%); /* 微调水平位置 */
+}
+
+/* 弹窗表格保持原有样式 */
+.modal-content table {
+  width: auto !important;
+  transform: none;
+}
+.table-bordereds{
+    margin-top: 10%;
+}
+/* 标题容器新增样式 */
+.htmleaf-header {
+  position: relative;
+  width: 100%;
+  margin: 20px 0 80px; /* 下边距预留小表格空间 */
+}
+
+/* 小表格定位调整 */
+.th_t {
+  position: absolute;
+  left: 6%;
+  top: calc(10% + 5%); /* 基于标题高度的5%下移 */
+  transform: translateY(-50%); /* 微调垂直居中 */
+  z-index: 2;
+}
+
+/* 标题文字保持居中 */
+.htmleaf-header h1 {
+  margin: 0 auto;
+  transform: translateX(8%); /* 补偿小表格占用的5%空间 */
+}
+.cha_buts {
+  /* position: fixed;  改为固定定位 */
+  right: 5%;        /* 距离右侧5% */
+  top: 20px;        /* 距离顶部20px */
+  width: auto;      /* 自动宽度 */
+  margin: 0;         /* 清除旧margin */
+  z-index: 999;     /* 确保在最上层 */
+  transform: none;  /* 清除旧变换 */
+}
+
+/* 清除旧定位属性 */
+.city.but.qing {
+  position: static;
+  margin: 0;
+  left: auto;
+  top: auto;
+}
+
+/* 按钮排列优化 */
+.containers {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+</style>
+</head>
+<body style="background-color: #02417d;">
+
+<div class="top_in" style="height: 30px;"></div>
+	<div class="htmleaf-containers">
+        <div class="cha_buts">
+            <div class="htmleaf-container ">
+                <div class="containers">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <select id="data_slide" class="xia" name="info">
+                                    <option  value="03555908963251-分钟均值数据">分钟均值数据</option>
+                                    <option value="03555908963251">小时均值数据</option>
+                                </select>
+
+                                <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                                    <input name="times" id="data_info" type="text" class="data_info form-control datetimepicker-input" data-target="#datetimepicker2" value="请选择时间" style="height: 30px;border-radius:10px;">
+                                    <div class="input-group-append date datepickers " data-target="#datetimepicker2" data-toggle="datetimepicker">
+
+                                        <script>
+                                          function updateInput() {
+                                            var now = new Date();
+                                            var year = now.getFullYear();
+                                            var month = ('0' + (now.getMonth() + 1)).slice(-2);
+                                            var day = ('0' + now.getDate()).slice(-2);
+                                            var hours = ('0' + now.getHours()).slice(-2);
+                                            var minutes = ('0' + now.getMinutes()).slice(-2);
+                                            var seconds = ('0' + now.getSeconds()).slice(-2); // 添加秒的格式化
+                                            document.getElementById('data_info').value = year + '年' + month + '月' + day + '日 ' + hours + ':' + minutes + ':' + seconds;;
+                                            }
+                                          updateInput()
+                                          setInterval(updateInput, 60000); // 每秒调用一次 updateInput 函数
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <button id="buttons" value="立即查询" type="button" class="time-input"
+                        onclick="handleQuery()"
+                        style="transition: all 0.3s;">立即查询
+            </button>
+                <div id="modalBackdrop" class="modal-backdrop">
+                  <div class="modal-content" onclick="event.stopPropagation()">
+                    <div class="modal-body" id="resultTable"></div>
+                  </div>
+                </div>
+            <style>
+                #buttons {
+                        background-color: #02417d !important;
+                        color: #ffffff !important;
+                        font-size: 20px;
+                        font-weight: bold;
+                        margin-top: 30px;
+                        width: 108px;
+                        height: 40px;
+                        border: none !important;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                        border-radius: 4px;  /* 可选：添加圆角 */
+                    }
+
+                #buttons:hover {
+                      background-color: #01315f !important; /* 鼠标悬停颜色加深 */
+                      box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* 可选：悬停阴影效果 */
+                    }
+                .modal-backdrop {
+                  display: none;
+                  position: fixed;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                  background: rgb(255 255 255 / 50%);
+                  z-index: 999;
+                }
+
+                .modal-content {
+                  position: relative;
+                  width: 90vw;
+                  height: 80vh;
+                  max-width: 1440px;
+                  margin: 5% auto;
+                  background: #ffffff;
+                  border: 1px solid #ffffff;
+                  overflow: auto;
+                  box-sizing: border-box;
+                }
+
+                .modal-body {
+                  padding: 20px;
+                  width: max-content;
+                  min-width: 100%;
+                  display: flex;          /* 弹性布局容器 */
+                  justify-content: center; /* 水平居中 */
+                }
+
+                #resultTable {
+                  margin: 0 auto;         /* 表格容器居中 */
+                }
+
+                #resultTable table {
+                  width: auto;
+                  border-collapse: collapse;
+                  table-layout: auto;
+                }
+
+                #resultTable th,
+                #resultTable td {
+                    font-size: 20px;
+                    border: 1px solid #0088cc;
+                    padding: 5px;
+                    text-align: center;
+                    color: #000000;
+                    white-space: nowrap;
+                }
+
+                #resultTable th {
+                  background: #13f2ff;
+                  font-size: 20px;
+                  font-weight: bold;
+                  position: sticky;
+                  top: 0;
+                  z-index: 1;
+                }
+          </style>
+
+            <script>
+                // 修改后的查询函数
+                async function handleQuery() {
+                  try {
+                    // showLoading(); // 显示加载状态
+                    const timestamps = document.getElementById('data_info').value.replace(/[年月]/g, '-').replace('日', '');
+                    const sites = document.getElementById('data_slide').value;
+                    const response = await fetch('/query_api', {
+                      method: 'POST',
+                      headers: {'Content-Type': 'application/json'},
+                      body: JSON.stringify({
+                        site: sites,
+                        timestamp: timestamps
+                      })
+                    });
+
+                    if (!response.ok) throw new Error(`请求失败: ${response.status}`);
+
+                    const { status, data } = await response.json();
+
+                    if (status !== 'success') throw new Error(data?.message || '未知错误');
+                    renderTable(data);
+                    openModal();
+                  } catch (error) {
+                    console.error('查询失败:', error);
+                    alert(error.message);
+                  } finally {
+                      console.error('隐藏加载状态');
+                      // hideLoading(); // 隐藏加载状态
+                  }
+                }
+
+                // 渲染表格
+                function renderTable(data) {
+                  const container = document.getElementById('resultTable');
+                  if (data.length === 0) {
+                    container.innerHTML = "<div class='no-data'>没有查询到相关数据</div>";
+                    return;
+                  }
+
+                  let html = `<table>
+                    <thead><tr>${Object.keys(data[0]).map(k => `<th>${k}</th>`).join('')}</tr></thead>
+                    <tbody>`;
+
+                  data.forEach(row => {
+                    html += `<tr>${Object.values(row).map(v =>
+                      `<td>${v !== null ? v : '-'}</td>`
+                    ).join('')}</tr>`;
+                  });
+
+                  html += '</tbody></table>';
+                  container.innerHTML = html;
+                }
+
+                // 弹窗控制
+                function openModal() {
+                  document.getElementById('modalBackdrop').style.display = 'block';
+                }
+
+                function closeModal() {
+                  document.getElementById('modalBackdrop').style.display = 'none';
+                }
+
+                // 点击背景关闭
+                document.getElementById('modalBackdrop').onclick = closeModal;
+            </script>
+            <button class="city but qing">清空查询</button>
+        </div>
+    </div>
+
+    </div>
+		<header class="htmleaf-header">
+			<h1>在线监测数据全览</h1>
+		</header>
+		<div class="th_t">
+			<table class="table table-bordereds " align="center" width="280" cellspacing="0" cellpadding="10px">
+				<thead class="th1">
+					<tr>
+						<th>二氧化硫</th>
+						<th>氮氧化物</th>
+						<th>氧含量</th>
+					</tr>
+					<tbody id="th1_s">
+                        <tr>
+                            <td class="SO2">正在加载</td>
+                            <td class="NOX">正在加载</td>
+                            <td class="O2HL">正在加载</td>
+                        </tr>
+					</tbody>
+				</thead>
+			</table>
+		</div>
+        <div class="th_tr">
+			<table class="table table-bordered table-striped" id="excelstyles"  align="center" cellspacing="0" cellpadding="10px">
+                <thead class="blues">
+                    <tr>
+					  <th>站点</th>
+					  <th>时间</th>
+					  <th>二氧化硫</th>
+					  <th>氮氧化物</th>
+					  <th>烟尘</th>
+					  <th>氧含量</th>
+					  <th>流速</th>
+					  <th>湿度</th>
+					  <th>温度</th>
+                    </tr>
+                </thead>
+                <tbody id="test_table" class="excelstyles test_tables">
+                    <tr>
+                        <td>正在加载</td>
+                        <td>正在加载</td>
+                        <td class="SO2">正在加载</td>
+                        <td class="NOX">正在加载</td>
+                        <td class="YC">正在加载</td>
+                        <td class="O2HL">正在加载</td>
+                        <td class="YQLS">正在加载</td>
+                        <td class="YQSD">正在加载</td>
+                        <td class="WD">正在加载</td>
+                    </tr>
+                </tbody>
+			</table>
+			<div id="txt"></div>
+        </div>
+</body>
+
+<script type="module">
+    alert('程序正在启动-请点击确定后再次点击右上角清空查询按钮');
+    let socket;
+    let retryCount = 0;  // 用于追踪重试次数
+    let siteConfig = null; // 缓存配置
+
+    // 初始化时加载配置（只需执行一次）
+    (async function init() {
+        try {
+            // 等待获取 JSON 数据
+            console.log('等待获取 JSON 数据');
+            const response = await fetch('http://localhost:35765/settings', {method: 'POST', headers: {'Content-Type': 'application/json'}});
+            console.log(response);
+            if (!response.ok) {
+                console.log('网络响应错误');
+            }
+            siteConfig = await response.json(); // 更新全局的 siteConfig
+            console.log(siteConfig);
+        } catch (error) {
+            console.error('配置加载失败:', error);
+            siteConfig = {}; // 降级处理
+        }
+    })();
+    export async function processData(data) {
+        const messages = [];
+
+        if (!siteConfig) return "配置加载中，请稍后刷新";
+        if (!data?.length) return "No data";
+
+        data.forEach(dataItem => {
+            const outlet = dataItem.outlet?.trim();
+            if (!outlet || !siteConfig[outlet]) return;
+
+            // 时间处理
+            const pubDateStr = dataItem.pub_date?.replace(/- /g, '-');
+            const pubDate = new Date(pubDateStr);
+            const currentDate = new Date();
+            const timeDiff = Math.round((currentDate - pubDate) / (1000 * 60));
+            const timePart = pubDateStr?.slice(11, 19) || '未知时间';
+            const prefix = `${outlet}-${timePart}`;
+
+            // 超时检测
+            if (timeDiff > siteConfig[outlet].timeout) {
+                messages.push(`${prefix}: 数据超时 ${timeDiff}分钟`);
+            }
+
+            // 数值检测
+            Object.entries(siteConfig[outlet].params).forEach(([param, { min, max }]) => {
+                const value = parseFloat(dataItem[param]);
+                if (!isNaN(value) && (value <= min || value >= max)) {
+                    messages.push(`${prefix}: ${param}异常 ${value.toFixed(3)}`);
+                }
+            });
+
+            // 状态检测
+            Object.entries(siteConfig[outlet].statusCheck).forEach(([statusField, allowedValues]) => {
+                const status = dataItem[statusField]?.trim();
+                if (status && !allowedValues.includes(status)) {
+                    messages.push(`${prefix}: ${statusField}异常 ${status}`);
+                }
+            });
+        });
+        return messages.length ? messages.join('\n') : "No data";
+    }
+
+		function createWebSocketConnection() {
+            // 创建 WebSocket 连接
+            socket = new WebSocket("ws://localhost:8766");
+			// 注册事件监听器
+			socket.addEventListener('message', createWebSocketConnection);
+
+			// 在不再需要时移除事件监听器
+			// 确保长时间运行时，事件监听器不会无限制增加
+			socket.removeEventListener('message', createWebSocketConnection);
+            // 连接打开时的回调函数
+            socket.onopen = function () {
+                console.log('WebSocket 已连接');
+            };
+			// 连接关闭时的回调函数
+			socket.onclose = function () {
+				console.log('WebSocket 已关闭');
+
+				// 如果重试次数小于 3，尝试重新连接
+				if (retryCount < 3) {
+					retryCount++;
+					console.log('尝试重新连接，第 ${retryCount} 次');
+					setTimeout(createWebSocketConnection, 3000);  // 3秒后重新连接
+				} else {
+					// 重试次数超过 3 次，提示连接异常
+					alert('网络连接异常');  // 弹出提示框
+				}
+			};
+
+            // 接收到消息时的回调函数
+            socket.onmessage = function (event) {
+				// 检查是否是心跳包（ping）
+				if (event.data === "ping") {
+					console.log("收到心跳包");
+				} else {
+					try {
+						const message = JSON.parse(event.data);
+
+						switch(message.type) {
+                            case 'connection_status':
+                                // 更新连接状态UI
+                                console.log('连接状态:', message.connected);
+                                break;
+                            case 'realtime_update':
+                                // 提取第一个元素到 books 变量
+                                var booksVar = message.data; // 注意字段名改为data
+                                var tr_dc = '';
+                                var tr_op = '';
+                                for (var i = 0; i < booksVar.length; i++) {
+                                    var pOptions = "<tr><td>" + booksVar[i].outlet + "</td>" +
+                                        "<td>" + booksVar[i].pub_date.slice(11) + "</td>" +
+                                        "<td>" + booksVar[i].二氧化硫 + "</td>" +
+                                        "<td>" + booksVar[i].氮氧化物 + "</td>" +
+                                        "<td>" + booksVar[i].烟尘 + "</td>" +
+                                        "<td>" + booksVar[i].氧含量 + "</td>" +
+                                        "<td>" + booksVar[i].烟气流速 + "</td>" +
+                                        "<td>" + booksVar[i].烟气湿度 + "</td>" +
+                                        "<td>" + booksVar[i].温度 + "</td></tr>";
+                                    var popOutlettxt = "<tr><td class='SO2'>" + booksVar[0].二氧化硫 + "</td><td class='NOX'>" + booksVar[0].氮氧化物 + " </td><td class='O2HL'>" + booksVar[0].氧含量 + "</td></tr>"
+                                    tr_dc += pOptions;
+                                    tr_op += popOutlettxt;
+                                    }
+                                $("#test_table").html(tr_dc);
+                                $("#th1_s").html(tr_op);
+                                // const titles = processData(booksVar);  // 调用 processData 函数传到js中进行判断并接收返回值
+
+                                async function handleData() {
+                                    try {
+                                        const result = await processData(booksVar);
+                                        if (result === "No data") {
+                                            console.log("无有效数据");
+                                            return;
+                                        }
+
+                                        // 分割报警信息
+                                        const alertMessages = result.split('\n');
+                                        if (alertMessages.length === 0) return;
+
+                                        // 创建容器存放所有报警信息
+                                        let allMessages = '';
+                                        const matchedValues = []; // 存储所有匹配的数值
+
+                                        // 处理每条报警信息
+                                        alertMessages.forEach(msg => {
+                                            // 格式化报警文本
+                                            const formattedMsg = msg.replace(/,/g, " ").replace(/\n/g, "<br/>");
+                                            allMessages += `<div class="alert-item">${formattedMsg}</div>`;
+
+                                            // 提取数值
+                                            const matches = msg.match(/[\d.]+/g) || [];
+                                            matchedValues.push(...matches);
+                                        });
+
+                                        // 批量更新DOM（性能优化关键）
+                                        $('#txt').html(allMessages);
+
+                                        // 高亮所有匹配的数值
+                                        // 正则表达式匹配所有数字（包括可能的小数）
+                                        let regex = /([\d.]+)/g;
+
+                                        // 使用正则表达式提取所有的数字
+                                        let matches = [];
+                                        let match;
+                                        while ((match = regex.exec(allMessages)) !== null) {
+                                          matches.push(match[1]);
+                                        }
+                                        // 使用 for 循环遍历提取出的数值
+                                        for (let i = 0; i < matches.length; i++) {
+                                           // 获取所有的 td 元素
+                                            var tdElements = document.querySelectorAll('td');
+
+                                            // 遍历所有 td 元素，查找包含文本 '48.644' 的 td
+                                            tdElements.forEach(function(td) {
+                                                if (td.textContent.trim() === matches[i]) {
+                                                    // 设置背景色为红色或其他颜色（自动执行）
+                                                    td.style.backgroundColor = "red";  // 设置为红色
+                                                    setTimeout(function() {
+                                                        // 延时切换为另一种颜色（模拟背景色变化）
+                                                        td.style.backgroundColor = "rgb(2,65,125,1)";
+                                                    }, 5000); // 1000 毫秒后变为另一个颜色
+                                                }
+                                            });
+                                        }
+                                        // 播放报警音效（仅播放一次）
+                                        new Audio("static/mp3/1.mp3").play();
+                                        } catch (error) {
+                                            console.error('数据处理失败:', error);
+                                        }
+}
+                                // 调用入口
+                                handleData();
+						}
+						}catch (e) {
+						console.log('尝试重连', e);
+						setTimeout(createWebSocketConnection, 3000);  // 3秒后重新连接
+				}
+				}
+			};
+			// 连接错误时的回调函数
+			socket.onerror = function (error) {
+				console.error('WebSocket 发生错误，正在重新连接...：', error);
+				setTimeout(createWebSocketConnection, 3000);  // 3秒后重新连接
+			};
+        }
+
+		// 启动 WebSocket 连接
+		createWebSocketConnection();
+		</script>
+
+
+</html>
